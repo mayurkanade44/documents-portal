@@ -28,7 +28,7 @@ export const Documents = () => {
               <tr key={docs.id}>
                 <td>{docs.name}</td>
               </tr>
-            )) }
+            ))}
         </tbody>
       </table>
     </div>
