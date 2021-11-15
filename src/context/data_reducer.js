@@ -13,6 +13,13 @@ const data_reducer = (state, action) => {
         loading: false,
         error: action.payload,
       };
+    case "DOCUMENTS_SUCCESS":
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        docs: action.payload,
+      };
 
     default:
       throw new Error(`No Matching "${action.type}" - action type`);

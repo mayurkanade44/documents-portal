@@ -6,6 +6,7 @@ const DataContext = createContext();
 
 const initialState = {
   data: [],
+  docs: [],
   loading: false,
 };
 
@@ -28,13 +29,24 @@ export const DataProvider = ({ children }) => {
     }
   };
 
-  useEffect(()=> {
-      fetchData()
-  },[])
+  const fetchDocuments = async (id) => {
+    try {
+      const res = await axios.get(`http://localhost:5000/services/${id}`);
+      dispatch({
+        type: "DOCUMENTS_SUCCESS",
+        payload: res.data,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
-    <DataContext.Provider value={{ ...state, fetchData }}>
+    <DataContext.Provider value={{ ...state, fetchData, fetchDocuments }}>
       {children}
     </DataContext.Provider>
   );
