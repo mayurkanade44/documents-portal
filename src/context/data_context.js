@@ -13,9 +13,11 @@ const initialState = {
 export const DataProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  // http://localhost:5000/services/
+
   const fetchData = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/services/");
+      const res = await axios.get("http://127.0.0.1:8000/api/services/");
       dispatch({
         type: "DATA_SUCCESS",
         payload: res.data,
@@ -31,7 +33,7 @@ export const DataProvider = ({ children }) => {
 
   const fetchDocuments = async (id) => {
     try {
-      const res = await axios.get(`http://localhost:5000/services/${id}`);
+      const res = await axios.get(`http://127.0.0.1:8000/api/services/${id}`);
       dispatch({
         type: "DOCUMENTS_SUCCESS",
         payload: res.data,

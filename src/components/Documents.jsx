@@ -24,9 +24,14 @@ export const Documents = () => {
         </thead>
         <tbody>
           {docs.length !== 0 &&
-            docs.MSDS.map((docs) => (
+            docs.msds.map((docs) => (
               <tr key={docs.id}>
                 <td>{docs.name}</td>
+                <td>
+                  <a href={`http://127.0.0.1:8000${docs.file}`} download>
+                    Download
+                  </a>
+                </td>
               </tr>
             ))}
         </tbody>
