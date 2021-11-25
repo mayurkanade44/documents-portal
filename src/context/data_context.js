@@ -5,6 +5,9 @@ import reducer from "./data_reducer";
 const DataContext = createContext();
 
 const initialState = {
+  token: localStorage.getItem("token"),
+  isAuthenticated: false,
+  user: localStorage.getItem("user"),
   data: [],
   docs: [],
   loading: false,
@@ -13,9 +16,40 @@ const initialState = {
 export const DataProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  // http://localhost:5000/services/
+  const login = async (username, password) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    try {
+      const res = await axios.post(
+        "http://127.0.0.1:8000/api/login/",
+        { username: username, password: password },
+        config
+      );
+      dispatch({
+        type: "LOGIN_SUCCESS",
+        payload: res.data,
+      });
+    } catch (error) {
+      dispatch({
+        type: "LOGIN_FAIL",
+        payload: error.response.data.detail,
+      });
+    }
+  };
 
   const fetchData = async () => {
+    const token = localStorage.getItem("token");
+    // const config = {
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     Authorization: `Bearer ${token}`,
+    //   },
+    // };
+
     try {
       const res = await axios.get("http://127.0.0.1:8000/api/services/");
       dispatch({
@@ -32,8 +66,14 @@ export const DataProvider = ({ children }) => {
   };
 
   const fetchDocuments = async (id) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
     try {
-      const res = await axios.get(`http://127.0.0.1:8000/api/services/${id}`);
+      const res = await axios.get(`http://127.0.0.1:8000/api/services/${id}`, config);
       dispatch({
         type: "DOCUMENTS_SUCCESS",
         payload: res.data,
@@ -43,12 +83,38 @@ export const DataProvider = ({ children }) => {
     }
   };
 
+  const sendEmail = async (email) => {
+    const token = localStorage.getItem("token");
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    try {
+
+      const res = await axios.post(
+        "http://127.0.0.1:8000/api/email/",
+        email,
+        config
+      );
+      dispatch({
+        type: "EMAIL",
+        payload: res.data,
+      });
+      
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   useEffect(() => {
     fetchData();
   }, []);
 
   return (
-    <DataContext.Provider value={{ ...state, fetchData, fetchDocuments }}>
+    <DataContext.Provider value={{ ...state, fetchData, fetchDocuments, login, sendEmail }}>
       {children}
     </DataContext.Provider>
   );
