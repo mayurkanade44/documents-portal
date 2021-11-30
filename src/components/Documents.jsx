@@ -1,20 +1,32 @@
-import React from "react";
+import React, {useState} from "react";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react/cjs/react.development";
 import { useDataContext } from "../context/data_context";
 
 export const Documents = () => {
   const { id } = useParams();
-  const { fetchDocuments, docs } = useDataContext();
+  const { fetchDocuments, docs, sendEmail } = useDataContext();
+
+  const [emailId, setEmailId] = useState("");
+  const [subject, setSubject] = useState("");
+  const [files, setFiles] = useState([])
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    sendEmail(emailId, files, subject);
+  };
+
+  const attachingFile = (xy) => {
+    setFiles(files => [...files, xy])
+    console.log(files)
+  }
 
   useEffect(() => {
     fetchDocuments(id);
   }, [id]);
-  console.log(docs);
 
   return (
     <div>
-      <h1>Mayur</h1>
       <table className="table">
         <thead>
           <tr>
@@ -32,10 +44,39 @@ export const Documents = () => {
                     Download
                   </a>
                 </td>
+                <button onClick={() => attachingFile(docs.file)}>Attach</button>
               </tr>
             ))}
         </tbody>
       </table>
+      <form onSubmit={handleSubmit} style={{ marginTop: 10 }}>
+        <label className="form-label">To Email ID</label>
+        <input
+          type="email"
+          className="form-control"
+          name="email"
+          value={emailId}
+          onChange={(e) => setEmailId(e.currentTarget.value)}
+          required
+        />
+        <label className="form-label">Subject</label>
+        <input
+          type="text"
+          className="form-control"
+          name="subject"
+          value={subject}
+          onChange={(e) => setSubject(e.currentTarget.value)}
+          required
+        />
+        <label className="form-label">Files</label>
+        <input
+          type="text"
+          className="form-control"
+          name="files"
+          value={files}
+        />
+        <button className="btn btn-primary">Send</button>
+      </form>
     </div>
   );
 };

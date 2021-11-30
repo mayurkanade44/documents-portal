@@ -73,7 +73,10 @@ export const DataProvider = ({ children }) => {
     };
 
     try {
-      const res = await axios.get(`http://127.0.0.1:8000/api/services/${id}`, config);
+      const res = await axios.get(
+        `http://127.0.0.1:8000/api/services/${id}`,
+        config
+      );
       dispatch({
         type: "DOCUMENTS_SUCCESS",
         payload: res.data,
@@ -83,38 +86,42 @@ export const DataProvider = ({ children }) => {
     }
   };
 
-  const sendEmail = async (email) => {
+  const sendEmail = async (email, files, subject) => {
     const token = localStorage.getItem("token");
     const config = {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        // Authorization: `Bearer ${token}`,
       },
     };
 
     try {
-
       const res = await axios.post(
         "http://127.0.0.1:8000/api/email/",
-        email,
+        {
+          email: email,
+          files: files,
+          subject: subject
+        },
         config
       );
       dispatch({
         type: "EMAIL",
         payload: res.data,
       });
-      
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   useEffect(() => {
     fetchData();
   }, []);
 
   return (
-    <DataContext.Provider value={{ ...state, fetchData, fetchDocuments, login, sendEmail }}>
+    <DataContext.Provider
+      value={{ ...state, fetchData, fetchDocuments, login, sendEmail }}
+    >
       {children}
     </DataContext.Provider>
   );
