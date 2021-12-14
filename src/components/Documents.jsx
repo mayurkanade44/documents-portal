@@ -33,6 +33,7 @@ export const Documents = () => {
 
   useEffect(() => {
     fetchDocuments(id);
+    // eslint-disable-next-line
   }, [id]);
 
   return (
@@ -74,8 +75,8 @@ export const Documents = () => {
                 </td>
                 <td>
                   <div className="row">
-                    <div className="col col-md-4">{docs.name}</div>
-                    <div className="col-2 col-md-4">
+                    <div className="col-md-6">{docs.name}</div>
+                    <div className="col-md-3">
                       <button className="btn btn-dark">
                         <a
                           style={{ textDecoration: "none", color: "white" }}
@@ -86,7 +87,7 @@ export const Documents = () => {
                         </a>
                       </button>
                     </div>
-                    <div className="col-2 col-md-4">
+                    <div className="col-md-3">
                       <button
                         className="btn btn-primary"
                         onClick={() => attachingFile(docs.file, docs.name)}

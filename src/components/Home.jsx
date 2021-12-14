@@ -7,6 +7,7 @@ export const Home = () => {
 
   useEffect(() => {
     fetchData();
+    // eslint-disable-next-line
   }, []);
 
   return (
@@ -22,12 +23,12 @@ export const Home = () => {
           <tbody>
             {data.map((data) => (
               <tr key={data.id}>
-                <Link
-                  to={`/documents/${data.id}`}
-                  style={{ textDecoration: "none" }}
-                >
-                  <td>{`${data.title} (${data.pets_name})`}</td>
-                </Link>
+                <td>
+                  <Link
+                    to={`/documents/${data.id}`}
+                    style={{ textDecoration: "none" }}
+                  >{`${data.title} (${data.pets_name})`}</Link>
+                </td>
               </tr>
             ))}
           </tbody>

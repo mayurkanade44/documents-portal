@@ -6,8 +6,9 @@ export const Alert = ({ message, removeAlert }) => {
       removeAlert();
     }, 3000);
     return () => clearTimeout(timer);
+    // eslint-disable-next-line
   }, []);
-  
+
   return (
     <div className="alert alert-success" role="alert">
       Email Has Been Sent
