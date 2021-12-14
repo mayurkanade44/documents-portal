@@ -4,6 +4,7 @@ import { Documents } from "./components/Documents";
 import { Login } from "./components/Login";
 import { Navbar } from "./components/Navbar";
 import { Error } from "./components/Error";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
@@ -12,7 +13,14 @@ function App() {
       <div className="container">
         <Routes>
           <Route path="/" element={<Login />} />
-          <Route path="/home" element={<Home />} />
+          <Route
+            path="/home"
+            element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/documents/:id" element={<Documents />} />
           <Route path="*" element={<Error />} />
         </Routes>
