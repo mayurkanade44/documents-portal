@@ -2,23 +2,33 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react/cjs/react.development";
 import { useDataContext } from "../context/data_context";
+import { Alert } from "./Alert";
 
 export const Documents = () => {
   const { id } = useParams();
-  const { fetchDocuments, docs, sendEmail } = useDataContext();
+  const { fetchDocuments, docs, sendEmail, msg } = useDataContext();
+  const [alert, setAlert] = useState({
+    show: false,
+    message: "",
+  });
+
+  const showAlert = (show = false, message = " ") => {
+    setAlert({ show, message });
+  };
 
   const [emailId, setEmailId] = useState("");
-  const [subject, setSubject] = useState("");
   const [files, setFiles] = useState([]);
+  const [fileName, setFileName] = useState([]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    sendEmail(emailId, files, subject);
+    sendEmail(emailId, files, fileName);
+    showAlert(true, msg);
   };
 
-  const attachingFile = (xy) => {
-    setFiles((files) => [...files, xy]);
-    console.log(files);
+  const attachingFile = (file, name) => {
+    setFiles((files) => [...files, file]);
+    setFileName((names) => [...names, name]);
   };
 
   useEffect(() => {
@@ -40,8 +50,8 @@ export const Documents = () => {
               <tr key={docs.id}>
                 <td>
                   <div className="row">
-                    <div className="col">{docs.name}</div>
-                    <div className="col-2">
+                    <div className="col-md-6">{docs.name}</div>
+                    <div className="col-md-3">
                       <button className="btn btn-dark">
                         <a
                           style={{ textDecoration: "none", color: "white" }}
@@ -52,10 +62,10 @@ export const Documents = () => {
                         </a>
                       </button>
                     </div>
-                    <div className="col-2">
+                    <div className="col-md-3">
                       <button
                         className="btn btn-primary"
-                        onClick={() => attachingFile(docs.file)}
+                        onClick={() => attachingFile(docs.file, docs.name)}
                       >
                         Attach
                       </button>
@@ -64,8 +74,8 @@ export const Documents = () => {
                 </td>
                 <td>
                   <div className="row">
-                    <div className="col">{docs.name}</div>
-                    <div className="col-2">
+                    <div className="col col-md-4">{docs.name}</div>
+                    <div className="col-2 col-md-4">
                       <button className="btn btn-dark">
                         <a
                           style={{ textDecoration: "none", color: "white" }}
@@ -76,10 +86,10 @@ export const Documents = () => {
                         </a>
                       </button>
                     </div>
-                    <div className="col-2">
+                    <div className="col-2 col-md-4">
                       <button
                         className="btn btn-primary"
-                        onClick={() => attachingFile(docs.file)}
+                        onClick={() => attachingFile(docs.file, docs.name)}
                       >
                         Attach
                       </button>
@@ -92,7 +102,8 @@ export const Documents = () => {
       </table>
       <div className="row">
         <div className="col-md-6 offset-md-3">
-          <form onSubmit={handleSubmit} style={{ marginTop: 50 }}>
+          {alert.show && msg && <Alert {...alert} removeAlert={showAlert} />}
+          <form onSubmit={handleSubmit} style={{ marginTop: 30 }}>
             <label className="form-label">To Email ID</label>
             <input
               type="email"
@@ -102,21 +113,12 @@ export const Documents = () => {
               onChange={(e) => setEmailId(e.currentTarget.value)}
               required
             />
-            <label className="form-label">Subject</label>
-            <input
-              type="text"
-              className="form-control"
-              name="subject"
-              value={subject}
-              onChange={(e) => setSubject(e.currentTarget.value)}
-              required
-            />
             <label className="form-label">Files</label>
             <input
               type="text"
               className="form-control"
               name="files"
-              value={files}
+              value={fileName}
               disabled
             />
             <button className="btn btn-primary mt-3">Send</button>

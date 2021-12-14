@@ -11,6 +11,7 @@ const initialState = {
   data: [],
   docs: [],
   loading: false,
+  msg:''
 };
 
 export const DataProvider = ({ children }) => {
@@ -90,7 +91,7 @@ export const DataProvider = ({ children }) => {
     }
   };
 
-  const sendEmail = async (email, files, subject) => {
+  const sendEmail = async (email, files, names) => {
     const token = localStorage.getItem("token");
     const config = {
       headers: {
@@ -105,13 +106,13 @@ export const DataProvider = ({ children }) => {
         {
           email: email,
           files: files,
-          subject: subject
+          names: names
         },
         config
       );
       dispatch({
         type: "EMAIL",
-        payload: res.data,
+        payload: res.data.msg,
       });
     } catch (error) {
       console.log(error);

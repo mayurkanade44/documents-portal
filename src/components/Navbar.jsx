@@ -30,11 +30,6 @@ export const Navbar = () => {
           <h4>Login</h4>
         </Link>
       </li>
-      {/* <li className="nav-item">
-        <Link to="/register" className="nav-link">
-          <h4>Register</h4>
-        </Link>
-      </li> */}
     </>
   );
 
