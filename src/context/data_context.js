@@ -1,5 +1,5 @@
 import axios from "axios";
-import { createContext, useContext, useEffect, useReducer } from "react";
+import { createContext, useContext, useReducer } from "react";
 import reducer from "./data_reducer";
 
 const DataContext = createContext();
@@ -41,17 +41,21 @@ export const DataProvider = ({ children }) => {
     }
   };
 
+  const logout = () => {
+    dispatch({ type: "LOGOUT" });
+  };
+
   const fetchData = async () => {
     const token = localStorage.getItem("token");
-    // const config = {
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     Authorization: `Bearer ${token}`,
-    //   },
-    // };
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
 
     try {
-      const res = await axios.get("http://127.0.0.1:8000/api/services/");
+      const res = await axios.get("http://127.0.0.1:8000/api/services/", config);
       dispatch({
         type: "DATA_SUCCESS",
         payload: res.data,
@@ -60,7 +64,7 @@ export const DataProvider = ({ children }) => {
       console.log(error);
       dispatch({
         type: "DATA_FAIL",
-        payload: error,
+        payload: error.response.data.detail,
       });
     }
   };
@@ -91,7 +95,7 @@ export const DataProvider = ({ children }) => {
     const config = {
       headers: {
         "Content-Type": "application/json",
-        // Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     };
 
@@ -114,13 +118,9 @@ export const DataProvider = ({ children }) => {
     }
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   return (
     <DataContext.Provider
-      value={{ ...state, fetchData, fetchDocuments, login, sendEmail }}
+      value={{ ...state, fetchData, fetchDocuments, login, logout, sendEmail }}
     >
       {children}
     </DataContext.Provider>
