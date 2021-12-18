@@ -21,7 +21,14 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route path="/documents/:id" element={<Documents />} />
+          <Route
+            path="/documents/:id"
+            element={
+              <ProtectedRoute>
+                <Documents />
+              </ProtectedRoute>
+            }
+          />
           <Route path="*" element={<Error />} />
         </Routes>
       </div>
