@@ -1,9 +1,15 @@
 const data_reducer = (state, action) => {
   switch (action.type) {
+    case "LOADING":{
+      return {
+        ...state,
+        loading: true
+      }
+    }
     case "DATA_SUCCESS":
       return {
         ...state,
-        loading: false,
+        loading: true,
         error: null,
         data: action.payload,
       };
@@ -16,7 +22,7 @@ const data_reducer = (state, action) => {
     case "DOCUMENTS_SUCCESS":
       return {
         ...state,
-        loading: false,
+        loading: true,
         error: null,
         docs: action.payload,
       };
@@ -25,7 +31,12 @@ const data_reducer = (state, action) => {
         ...state,
         loading: false,
         error: null,
-        msg:action.payload
+        msg: action.payload,
+      };
+    case "CLEAR MESSAGE":
+      return {
+        ...state,
+        msg: "",
       };
     case "LOGIN_SUCCESS":
       localStorage.setItem("token", action.payload.access);

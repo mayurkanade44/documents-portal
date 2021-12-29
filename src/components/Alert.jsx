@@ -1,9 +1,13 @@
 import React, { useEffect } from "react";
+import { useDataContext } from "../context/data_context";
 
-export const Alert = ({ message, removeAlert }) => {
+export const Alert = ({ clearFields }) => {
+const {clearMessage, msg} = useDataContext()  
+
   useEffect(() => {
     const timer = setTimeout(() => {
-      removeAlert();
+      clearMessage()
+      clearFields()
     }, 3000);
     return () => clearTimeout(timer);
     // eslint-disable-next-line
@@ -11,7 +15,7 @@ export const Alert = ({ message, removeAlert }) => {
 
   return (
     <div className="alert alert-success" role="alert">
-      Email Has Been Sent
+      {msg}
     </div>
   );
 };

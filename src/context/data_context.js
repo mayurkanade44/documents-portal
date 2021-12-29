@@ -47,6 +47,7 @@ export const DataProvider = ({ children }) => {
   };
 
   const fetchData = async () => {
+    dispatch({ type: "LOADING" });
     const token = localStorage.getItem("token");
     const config = {
       headers: {
@@ -71,6 +72,7 @@ export const DataProvider = ({ children }) => {
   };
 
   const fetchDocuments = async (id) => {
+    dispatch({ type: "LOADING" });
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -79,7 +81,7 @@ export const DataProvider = ({ children }) => {
 
     try {
       const res = await axios.get(
-        `http://127.0.0.1:8000/api/services/${id}`,
+        `http://127.0.0.1:8000/api/services/${id}/`,
         config
       );
       dispatch({
@@ -119,9 +121,15 @@ export const DataProvider = ({ children }) => {
     }
   };
 
+  const clearMessage = () =>{
+    dispatch({
+      type: "CLEAR MESSAGE",
+    });
+  }
+
   return (
     <DataContext.Provider
-      value={{ ...state, fetchData, fetchDocuments, login, logout, sendEmail }}
+      value={{ ...state, fetchData, fetchDocuments, login, logout, sendEmail, clearMessage }}
     >
       {children}
     </DataContext.Provider>
